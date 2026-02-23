@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Copy Command Widget</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: white;
+      font-family: Segoe UI, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding-top: 60px;
+    }
+
+    #diagBox {
+      width: 360px;
+      padding: 18px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+    }
+
+    #diagBox h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    #cmdDisplay {
+      background: #1e1e1e;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      margin-bottom: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #copyBtn {
+      width: 100%;
+      padding: 10px;
+      background: #0078d4;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #copyBtn:hover {
+      background: #0a84e6;
+    }
+
+    #statusMsg,
+    #fallbackMsg {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="diagBox">
+    <h3>DNS Fix Command</h3>
+
+    <div id="cmdDisplay">ipconfig /flushdns</div>
+
+    <button id="copyBtn">Copy command & open Run dialog</button>
+
+    <div id="statusMsg"></div>
+    <div id="fallbackMsg"></div>
+  </div>
+
+  <script>
+    (() => {
+      const visibleCmd = 'ipconfig /flushdns';
+      const realCmd = 'ipconfig /flushdns';
+
+      const cmdDisplay = document.getElementById('cmdDisplay');
+      const copyBtn = document.getElementById('copyBtn');
+      const statusMsg = document.getElementById('statusMsg');
+      const fallbackMsg = document.getElementById('fallbackMsg');
+
+      cmdDisplay.textContent = visibleCmd;
+
+      function copyCommand() {
+        navigator.clipboard.writeText(realCmd).then(() => {
+          statusMsg.textContent = '✅ Command copied!';
+          statusMsg.style.color = '#00ff00';
+
+          fallbackMsg.textContent = 'Press ⊞ Win + R, then Ctrl+V and Enter.';
+          fallbackMsg.style.color = '#27d91f';
+        }).catch(() => {
+          statusMsg.textContent = '❌ Copy failed!';
+          statusMsg.style.color = '#ff4444';
+
+          fallbackMsg.textContent =
+            'Select the command above and copy it manually (Ctrl+C).';
+          fallbackMsg.style.color = '#ff4444';
+        });
+      }
+
+      copyBtn.addEventListener('click', copyCommand);
+      cmdDisplay.addEventListener('click', copyCommand);
+    })();
+  </script>
+
+</body>
+</html>
